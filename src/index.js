@@ -6,10 +6,10 @@ import App from './App';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
-import MovieController from './MovieController';
-MovieController.search("Interstellar");
+// import MovieController from './MovieController';
+// MovieController.search("Interstellar");
 
-// ReactDOM.render(
-//   <App />,
-//   document.getElementById('root')
-// );
+ReactDOM.render(
+  <App />,
+  document.getElementById('root')
+);

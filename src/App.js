@@ -15,6 +15,25 @@ var SAMPLE_MOVIES = [
 
 //overall App
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {movies: [], totalResults: 0 };
+    this.fetchData = this.fetchData.bind(this);
+  }
+
+  //helper method
+  fetchData(searchTerm) {
+    var thisComponent = this; //1. save "this" for later
+    MovieController.search(searchTerm)
+      .then(function(data) { //once we get data
+        thisComponent.setState({
+          movies:data.results, 
+          totalResults:data.total_results
+        })
+      });
+  }  
+
   render() {
     return (
       <div className="container">
@@ -22,8 +41,8 @@ class App extends React.Component {
           <h1>Movie Search</h1>
         </header>
         <main>
-          <SearchForm />
-          <MovieTable movies={this.props.data.results} />
+          <SearchForm totalResults={this.state.totalResults} searchCallback={this.fetchData}/>
+          <MovieTable movies={this.state.movies} />
         </main>
       </div>
     );
@@ -70,8 +89,26 @@ class MovieRow extends React.Component {
 
 class SearchForm extends React.Component {
 
+  constructor(props) {
+    super(props);
+
+    this.state = {clickCount: 0, searchValue: ''}
+    this.handleClick = this.handleClick.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
   handleClick() {
     console.log("You clicked me!");
+
+    this.props.searchCallback(this.state.searchValue);
+    // var newCount = this.state.clickCount+1;
+    // this.setState({clickCount: newCount });
+  }
+
+  handleChange(event) {
+    var newValue = event.target.value;
+    console.log("has typed", newValue);
+    this.setState({searchValue: newValue});
   }
 
   render() {
@@ -83,8 +120,8 @@ class SearchForm extends React.Component {
               <Glyphicon glyph="search" aria-label="Search"/>
             </Button>
           </InputGroup.Button>
-          <FormControl type="text" placeholder="Search..." />
-          <InputGroup.Addon> {0} results </InputGroup.Addon>
+          <FormControl type="text" placeholder="Search..." onChange={this.handleChange}/>
+          <InputGroup.Addon> {this.props.totalResults} results </InputGroup.Addon>
         </InputGroup>
       </Form>
     );
