@@ -9,7 +9,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 MovieController.search("titanic");
 
-// ReactDOM.render(
-//   <App />,
-//   document.querySelector('#root')
-// );
+ReactDOM.render(
+  <App />,
+  document.querySelector('#root')
+);
