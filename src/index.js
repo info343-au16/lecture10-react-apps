@@ -4,8 +4,12 @@ import App from './App';
 
 //css files
 import './index.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('root')
-);
+import MovieController from './MovieController';
+MovieController.search("Interstellar");
+
+// ReactDOM.render(
+//   <App />,
+//   document.getElementById('root')
+// );

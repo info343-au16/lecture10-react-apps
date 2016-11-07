@@ -1,4 +1,7 @@
 import React from 'react';
+import {Form, FormControl, InputGroup, Button, Glyphicon} from 'react-bootstrap';
+
+import MovieController from './MovieController';
 
 var SAMPLE_MOVIES = [
   {
@@ -19,7 +22,8 @@ class App extends React.Component {
           <h1>Movie Search</h1>
         </header>
         <main>
-          <MovieTable movies={SAMPLE_MOVIES} />
+          <SearchForm />
+          <MovieTable movies={this.props.data.results} />
         </main>
       </div>
     );
@@ -31,6 +35,10 @@ class MovieTable extends React.Component {
   render() {
 
     //can interact with this.props here
+    var rows = this.props.movies.map(function(movieObj){
+      return <MovieRow movie={movieObj} />;
+      //new MovieRow(movieObj);
+    });
 
     return (
       <table className="table table-condensed">
@@ -38,7 +46,7 @@ class MovieTable extends React.Component {
           <tr><th className="col-xs-1">Poster</th><th className="col-xs-4">Title</th><th>Released</th></tr>
         </thead>
         <tbody>
-          <MovieRow />
+          {rows}
         </tbody>
       </table>      
     );
@@ -47,14 +55,39 @@ class MovieTable extends React.Component {
 
 class MovieRow extends React.Component {
   render() {
+
+    var posterUrl = MovieController.getPosterUrl(this.props.movie);
+
     return (
       <tr>
-        <td><img className="poster-lg" src="movie poster_url" alt="poster for movie title"/></td>
-        <td>Movie Title</td>
-        <td>Movie Release Date</td>
+        <td><img className="poster-lg" src={posterUrl} alt="poster for movie title"/></td>
+        <td>{this.props.movie.title}</td>
+        <td>{this.props.movie.release_date}</td>
       </tr>
     );
   }
 }
 
+class SearchForm extends React.Component {
+
+  handleClick() {
+    console.log("You clicked me!");
+  }
+
+  render() {
+    return (
+      <Form inline>
+        <InputGroup>
+          <InputGroup.Button>
+            <Button onClick={this.handleClick}>
+              <Glyphicon glyph="search" aria-label="Search"/>
+            </Button>
+          </InputGroup.Button>
+          <FormControl type="text" placeholder="Search..." />
+          <InputGroup.Addon> {0} results </InputGroup.Addon>
+        </InputGroup>
+      </Form>
+    );
+  }
+}
 export default App;
